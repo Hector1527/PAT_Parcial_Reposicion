@@ -10,8 +10,17 @@ Node<int>* Ejercicio03::detectCycle(Node<int>* head)
 		fast = fast->next->next;
 		slow = slow->next;
 
-		if (slow == fast)
-			return slow->next;
+		if (fast == slow)
+		{
+			Node<int>* result = head;
+			while (result != slow)
+			{
+				result = result->next;
+				slow = slow->next;
+			}
+			return result;
+		}
+
 	}
 	return nullptr;
 }
