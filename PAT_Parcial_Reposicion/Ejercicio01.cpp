@@ -1,37 +1,86 @@
 #include "Ejercicio01.h"
 
-//Node<int>* addTwoNumbersHelper(Node<int>* num1, Node<int>* num2, int sizeL1, int sizeL2, int& acarreo)
-//{
-//    if (sizeL1 == 0 && sizeL2 == 0 && acarreo == 0)
-//        return 0;
-//
-//    int valor1 = 0;
-//    int valor2 = 0; 
-//
-//    if (num1 && num2)
-//    {
-//        valor1 = num1->value;
-//        valor2 = num2->value;
-//    }
-//    int sum = valor1 + valor2 + acarreo;
-//    acarreo = sum / 10;
-//
-//    Node<int>* result = new Node<int>();
-//    result->value = sum % 10;
-//
-//    if (num1)
-//        num1 = num1->next;
-//    if (num2)
-//        num2 = num2->next;
-//
-//    result->next = addTwoNumbersHelper(num1, num2, sizeL1 - 1, sizeL2 - 1, acarreo);
-//
-//    return result;
-//}
+class Pila
+{
+private:
+	struct Nodo
+	{
+		int value;
+		Nodo* next;
+		Nodo(int num) : value(num), next(nullptr) {}
+	};
+	Nodo* head = nullptr;
+public:
+	void push(int num)
+	{
+		Nodo* newnodo = new Nodo(num);
+		newnodo->next = head;
+		head = newnodo;
+	}
+
+	int pop()
+	{
+
+		if (isempty())
+		{
+			return 0;
+		}
+
+		Nodo* nodo = head;
+		int valor = nodo->value;
+		head = head->next;
+
+		delete nodo;
+		return valor;
+	}
+
+	int front()
+	{
+		return head->value;
+	}
+
+	bool isempty()
+	{
+		return head == nullptr;
+	}
+};
 
 Node<int>* Ejercicio01::addTwoNumbers(Node<int>* l1, int sizeL1, Node<int>* l2, int sizeL2)
 {
-    //int acarreo = 0;
-    //return addTwoNumbersHelper(l1, l2, sizeL1, sizeL2, acarreo);
-    return nullptr;
+	Pila coladenum1, coladenum2;
+	Node<int>* result = nullptr;
+	int acarreo = 0;
+	int suma = 0;
+
+	while (l1 != nullptr)
+	{
+		coladenum1.push(l1->value);
+		l1 = l1->next;
+	}
+
+	while (l2 != nullptr)
+	{
+		coladenum2.push(l2->value);
+		l2 = l2->next;
+	}
+
+	while (!coladenum1.isempty() || !coladenum2.isempty() || acarreo)
+	{
+		suma = acarreo;
+		if (!coladenum1.isempty())
+		{
+			suma += coladenum1.pop();
+		}
+		if (!coladenum2.isempty())
+		{
+			suma += coladenum2.pop();
+		}
+
+		acarreo = suma / 10;
+
+		Node<int>* newnodo = new Node<int>{suma % 10, result};
+		result = newnodo;
+	}
+
+	return result;
 }
